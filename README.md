@@ -1,7 +1,7 @@
 # Pack — file orchestrator
 
 ```bash
-go install github.com/pt-main/cmd/pack@latest
+go install github.com/pt-main/pack/cmd/pack@latest
 ```
 
 Packs files into a single `.pack` file with optional compression and encryption.
