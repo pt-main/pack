@@ -1,7 +1,7 @@
 # Pack — файловый оркестратор
 
 ```bash
-go install github.com/pt-main/pack@latest
+go install github.com/pt-main/cmd/pack@latest
 ```
 
 Упаковывает файлы в один `.pack` файл с опциональным сжатием и шифрованием.
