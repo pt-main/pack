@@ -17,8 +17,8 @@ import (
 
 var gc = bytecode.GenerationConfig{
 	CommandBytelen:   1,
-	ArgscountBytelen: 7,
-	ArglenBytelen:    16,
+	ArgscountBytelen: 2,
+	ArglenBytelen:    32,
 	Endianess:        public.BigEndian,
 }
 
