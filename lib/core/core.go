@@ -46,8 +46,16 @@ func (c *Core) CreateFile() ([]byte, error) {
 	ig := bytecode.InstructionsGenerator{
 		Config: gc,
 	}
-	file = append(file, ig.Generate(0, [][]byte{[]byte(c.Name)})...)
-	file = append(file, ig.Generate(1, [][]byte{c.Meta})...)
+	name := []byte(c.Name)
+	if len(name) == 0 {
+		return nil, errors.New("Name can't be empty")
+	}
+	file = append(file, ig.Generate(0, [][]byte{name})...)
+	meta := [][]byte{}
+	if c.Meta != nil && len(c.Meta) != 0 {
+		meta = append(meta, c.Meta)
+	}
+	file = append(file, ig.Generate(1, meta)...)
 	for _, container := range c.Containers.Keys() {
 		cont, ok := c.GetContainer(container)
 		if !ok {
