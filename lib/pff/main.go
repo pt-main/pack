@@ -57,6 +57,9 @@ func (f *PF) Convert() error {
 	var err error
 	if slices.Contains(f.Flags, "zip") {
 		err = f.Compress()
+		if err != nil {
+			return fmt.Errorf("Convert: %v", err)
+		}
 	}
 	if slices.Contains(f.Flags, "secure") {
 		key, ok := f.Values["KEY"]
@@ -65,9 +68,9 @@ func (f *PF) Convert() error {
 				" (to encrypt file)")
 		}
 		f.File, err = f.Encrypt(f.File, []byte(key))
-	}
-	if err != nil {
-		return fmt.Errorf("Convert: %v", err)
+		if err != nil {
+			return fmt.Errorf("Convert: %v", err)
+		}
 	}
 	return nil
 }
@@ -81,12 +84,15 @@ func (f *PF) Deconvert() error {
 				" (to decrypt file)")
 		}
 		f.File, err = f.Decrypt(f.File, []byte(key))
+		if err != nil {
+			return fmt.Errorf("Deconvert: %v", err)
+		}
 	}
 	if slices.Contains(f.Flags, "zip") {
 		err = f.Decompress()
-	}
-	if err != nil {
-		return fmt.Errorf("Deconvert: %v", err)
+		if err != nil {
+			return fmt.Errorf("Deconvert: %v", err)
+		}
 	}
 	return nil
 }
