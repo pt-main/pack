@@ -62,9 +62,9 @@ func (f *PF) Convert() error {
 		}
 	}
 	if slices.Contains(f.Flags, "secure") {
-		key, ok := f.Values["KEY"]
+		key, ok := f.Values["key"]
 		if !ok {
-			return errors.New("Convert (2): Can't find 'KEY' key in values" +
+			return errors.New("Convert (2): Can't find 'key' key in values" +
 				" (to encrypt file)")
 		}
 		f.File, err = f.Encrypt(f.File, []byte(key))
@@ -78,9 +78,9 @@ func (f *PF) Convert() error {
 func (f *PF) Deconvert() error {
 	var err error
 	if slices.Contains(f.Flags, "secure") {
-		key, ok := f.Values["KEY"]
+		key, ok := f.Values["key"]
 		if !ok {
-			return errors.New("Deconvert (1): Can't find 'KEY' key in values" +
+			return errors.New("Deconvert (1): Can't find 'key' key in values" +
 				" (to decrypt file)")
 		}
 		f.File, err = f.Decrypt(f.File, []byte(key))
@@ -99,7 +99,7 @@ func (f *PF) Deconvert() error {
 
 func (f *PF) Apply() error {
 	var err error
-	if f.File != nil || len(f.File) == 0 {
+	if f.File != nil && len(f.File) > 0 {
 		err = f.Convert()
 	} else {
 		err = f.Deconvert()
