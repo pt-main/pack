@@ -26,7 +26,7 @@ const API_VER = "0"
 ```
 
 <a name="NewParser"></a>
-## func [NewParser](<https://github.com/pt-main/pack/blob/main/lib/core/core.go#L89>)
+## func [NewParser](<https://github.com/pt-main/pack/blob/main/lib/core/core.go#L101>)
 
 ```go
 func NewParser(c *Core) (*engine.ByteEngine, error)
@@ -50,7 +50,7 @@ type Core struct {
 ```
 
 <a name="NewCore"></a>
-### func [NewCore](<https://github.com/pt-main/pack/blob/main/lib/core/core.go#L74>)
+### func [NewCore](<https://github.com/pt-main/pack/blob/main/lib/core/core.go#L86>)
 
 ```go
 func NewCore(input *orderedmap.OrderedMap) *Core
@@ -77,7 +77,7 @@ func (c *Core) GetContainer(name string) ([]byte, bool)
 
 
 <a name="Core.ReadFile"></a>
-### func \(\*Core\) [ReadFile](<https://github.com/pt-main/pack/blob/main/lib/core/core.go#L61>)
+### func \(\*Core\) [ReadFile](<https://github.com/pt-main/pack/blob/main/lib/core/core.go#L69>)
 
 ```go
 func (c *Core) ReadFile(file []byte) error

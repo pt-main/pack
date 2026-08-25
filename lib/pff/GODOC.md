@@ -57,7 +57,7 @@ func NewPFfromFile(file []byte, processFlags map[string]string) *PF
 
 
 <a name="PF.Apply"></a>
-### func \(\*PF\) [Apply](<https://github.com/pt-main/pack/blob/main/lib/pff/main.go#L94>)
+### func \(\*PF\) [Apply](<https://github.com/pt-main/pack/blob/main/lib/pff/main.go#L100>)
 
 ```go
 func (f *PF) Apply() error
@@ -93,7 +93,7 @@ func (f *PF) Decompress() error
 
 
 <a name="PF.Deconvert"></a>
-### func \(\*PF\) [Deconvert](<https://github.com/pt-main/pack/blob/main/lib/pff/main.go#L75>)
+### func \(\*PF\) [Deconvert](<https://github.com/pt-main/pack/blob/main/lib/pff/main.go#L78>)
 
 ```go
 func (f *PF) Deconvert() error
@@ -120,7 +120,7 @@ func (f *PF) Encrypt(plaintext []byte, key []byte) ([]byte, error)
 
 
 <a name="PF.GetFromCore"></a>
-### func \(\*PF\) [GetFromCore](<https://github.com/pt-main/pack/blob/main/lib/pff/main.go#L107>)
+### func \(\*PF\) [GetFromCore](<https://github.com/pt-main/pack/blob/main/lib/pff/main.go#L113>)
 
 ```go
 func (f *PF) GetFromCore() ([]byte, error)
@@ -129,7 +129,7 @@ func (f *PF) GetFromCore() ([]byte, error)
 
 
 <a name="PF.SetToCore"></a>
-### func \(\*PF\) [SetToCore](<https://github.com/pt-main/pack/blob/main/lib/pff/main.go#L122>)
+### func \(\*PF\) [SetToCore](<https://github.com/pt-main/pack/blob/main/lib/pff/main.go#L128>)
 
 ```go
 func (f *PF) SetToCore() (*core.Core, error)
