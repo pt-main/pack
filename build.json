@@ -1,5 +1,6 @@
 {
   "output_dir": "./build",
+  "project_path": "./cmd/pack",
   "platforms": "all",
   "version": "1.1.2",
   "cgo_enabled": 0,

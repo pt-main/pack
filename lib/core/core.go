@@ -54,8 +54,8 @@ func (c *Core) CreateFile() ([]byte, error) {
 	meta := [][]byte{}
 	if c.Meta != nil && len(c.Meta) != 0 {
 		meta = append(meta, c.Meta)
+		file = append(file, ig.Generate(1, meta)...)
 	}
-	file = append(file, ig.Generate(1, meta)...)
 	for _, container := range c.Containers.Keys() {
 		cont, ok := c.GetContainer(container)
 		if !ok {
@@ -69,14 +69,18 @@ func (c *Core) CreateFile() ([]byte, error) {
 func (c *Core) ReadFile(file []byte) error {
 	magicLen := len(c.Magic)
 	if len(file) < magicLen || !slices.Equal(file[:magicLen], c.Magic) {
-		return errors.New("ReadFile: Invalid file: invalid magic")
+		return errors.New("ReadFile (1): Invalid file: invalid magic")
 	}
 	file = file[magicLen:]
 	p, err := NewParser(c)
 	if err != nil {
 		return err
 	}
-	return p.Process(file)
+	err_ := p.Process(file)
+	if err_ != nil {
+		return core.Wrap("ReadFile (2)", err_, "%v", err_)
+	}
+	return nil
 }
 
 func NewCore(input *orderedmap.OrderedMap) *Core {

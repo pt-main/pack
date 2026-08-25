@@ -58,18 +58,18 @@ func (f *PF) Convert() error {
 	if slices.Contains(f.Flags, "zip") {
 		err = f.Compress()
 		if err != nil {
-			return fmt.Errorf("Convert: %v", err)
+			return fmt.Errorf("Convert (1): %v", err)
 		}
 	}
 	if slices.Contains(f.Flags, "secure") {
 		key, ok := f.Values["KEY"]
 		if !ok {
-			return errors.New("Convert: Can't find 'KEY' key in values" +
+			return errors.New("Convert (2): Can't find 'KEY' key in values" +
 				" (to encrypt file)")
 		}
 		f.File, err = f.Encrypt(f.File, []byte(key))
 		if err != nil {
-			return fmt.Errorf("Convert: %v", err)
+			return fmt.Errorf("Convert (3): %v", err)
 		}
 	}
 	return nil
@@ -80,18 +80,18 @@ func (f *PF) Deconvert() error {
 	if slices.Contains(f.Flags, "secure") {
 		key, ok := f.Values["KEY"]
 		if !ok {
-			return errors.New("Deconvert: Can't find 'KEY' key in values" +
+			return errors.New("Deconvert (1): Can't find 'KEY' key in values" +
 				" (to decrypt file)")
 		}
 		f.File, err = f.Decrypt(f.File, []byte(key))
 		if err != nil {
-			return fmt.Errorf("Deconvert: %v", err)
+			return fmt.Errorf("Deconvert (2): %v", err)
 		}
 	}
 	if slices.Contains(f.Flags, "zip") {
 		err = f.Decompress()
 		if err != nil {
-			return fmt.Errorf("Deconvert: %v", err)
+			return fmt.Errorf("Deconvert (3): %v", err)
 		}
 	}
 	return nil
@@ -114,11 +114,11 @@ func (f *PF) GetFromCore() ([]byte, error) {
 	var err error
 	f.File, err = f.Core.CreateFile()
 	if err != nil {
-		return nil, fmt.Errorf("GetFromCore: %v", err)
+		return nil, fmt.Errorf("GetFromCore (1): %v", err)
 	}
 	err = f.Apply()
 	if err != nil {
-		return nil, fmt.Errorf("GetFromCore: %v", err)
+		return nil, fmt.Errorf("GetFromCore (2): %v", err)
 	}
 	file := f.File
 	f.File = nil
@@ -129,11 +129,11 @@ func (f *PF) SetToCore() (*core.Core, error) {
 	var err error
 	err = f.Apply()
 	if err != nil {
-		return nil, fmt.Errorf("SetToCore: %v", err)
+		return nil, fmt.Errorf("SetToCore (1): %v", err)
 	}
 	err = f.Core.ReadFile(f.File)
 	if err != nil {
-		return nil, fmt.Errorf("SetToCore: %v", err)
+		return nil, fmt.Errorf("SetToCore (2): %v", err)
 	}
 	return f.Core, nil
 }
