@@ -3,7 +3,9 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io/fs"
 	"os"
+	"path/filepath"
 	"slices"
 
 	"github.com/iancoleman/orderedmap"
@@ -161,5 +163,82 @@ func ShowHandler(p *tap.Parser, args []string) error {
 			fmt.Println(string(filedata))
 		}
 	}
+	return nil
+}
+
+func FilesZipHandler(p *tap.Parser, args []string) error {
+	packFile := args[0]
+	dir := args[1]
+
+	om := orderedmap.New()
+	err := filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() {
+			return nil
+		}
+		rel, err := filepath.Rel(dir, path)
+		if err != nil {
+			return err
+		}
+		rel = filepath.ToSlash(rel)
+		data, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		om.Set(rel, data)
+		return nil
+	})
+	if err != nil {
+		return fmt.Errorf("walk error: %w", err)
+	}
+
+	c := core.NewCore(om)
+	pf := pff.NewPFfromCore(c, p.Flags)
+	pfData, err := pf.GetFromCore()
+	if err != nil {
+		return fmt.Errorf("pack error: %w", err)
+	}
+	err = write(packFile, pfData)
+	if err != nil {
+		return fmt.Errorf("write error: %w", err)
+	}
+	color.PrintlnColored("[?GN]✅ Packed %d files into %s[?RT]", len(om.Keys()), packFile)
+	return nil
+}
+
+func FilesUnzipHandler(p *tap.Parser, args []string) error {
+	packFile := args[0]
+	dir := args[1]
+
+	data, err := open(packFile)
+	if err != nil {
+		return fmt.Errorf("open pack: %w", err)
+	}
+	pf := pff.NewPFfromFile(data, p.Flags)
+	c, err := pf.SetToCore()
+	if err != nil {
+		return fmt.Errorf("parse pack: %w", err)
+	}
+
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return fmt.Errorf("mkdir: %w", err)
+	}
+
+	extracted := 0
+	for _, key := range c.Containers.Keys() {
+		val, _ := c.GetContainer(key)
+		fullPath := filepath.Join(dir, filepath.FromSlash(key))
+
+		if err := os.MkdirAll(filepath.Dir(fullPath), 0755); err != nil {
+			return fmt.Errorf("mkdir for %s: %w", fullPath, err)
+		}
+		if err := write(fullPath, val); err != nil {
+			return fmt.Errorf("write %s: %w", fullPath, err)
+		}
+		extracted++
+	}
+	color.PrintlnColored("[?GN]✅ Extracted %d files to %s[?RT]", extracted, dir)
 	return nil
 }

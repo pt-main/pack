@@ -48,7 +48,7 @@ func (c *Core) CreateFile() ([]byte, error) {
 	}
 	name := []byte(c.Name)
 	if len(name) == 0 {
-		return nil, errors.New("Name can't be empty")
+		return nil, errors.New("Create file: Name can't be empty")
 	}
 	file = append(file, ig.Generate(0, [][]byte{name})...)
 	meta := [][]byte{}
@@ -59,7 +59,7 @@ func (c *Core) CreateFile() ([]byte, error) {
 	for _, container := range c.Containers.Keys() {
 		cont, ok := c.GetContainer(container)
 		if !ok {
-			return nil, errors.New("CreateFile: Invalid container: Invlid value type (all values must has []byte type)")
+			return nil, errors.New("Create file: Invalid container: Invlid value type (all values must has []byte type)")
 		}
 		file = append(file, ig.Generate(2, [][]byte{[]byte(container), cont})...)
 	}
@@ -69,7 +69,7 @@ func (c *Core) CreateFile() ([]byte, error) {
 func (c *Core) ReadFile(file []byte) error {
 	magicLen := len(c.Magic)
 	if len(file) < magicLen || !slices.Equal(file[:magicLen], c.Magic) {
-		return errors.New("ReadFile (1): Invalid file: invalid magic")
+		return errors.New("Read file (1: magic validation): Invalid file: invalid magic")
 	}
 	file = file[magicLen:]
 	p, err := NewParser(c)
@@ -78,7 +78,7 @@ func (c *Core) ReadFile(file []byte) error {
 	}
 	err_ := p.Process(file)
 	if err_ != nil {
-		return core.Wrap("ReadFile (2)", err_, "%v", err_)
+		return core.Wrap("Read file (2: processing)", err_, "%v", err_)
 	}
 	return nil
 }

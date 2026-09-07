@@ -58,18 +58,18 @@ func (f *PF) Convert() error {
 	if slices.Contains(f.Flags, "zip") {
 		err = f.Compress()
 		if err != nil {
-			return fmt.Errorf("Convert (1): %v", err)
+			return fmt.Errorf("Convert (1: compressing): %v", err)
 		}
 	}
 	if slices.Contains(f.Flags, "secure") {
 		key, ok := f.Values["key"]
 		if !ok {
-			return errors.New("Convert (2): Can't find 'key' key in values" +
+			return errors.New("Convert (2: secure): Can't find 'key' key in values" +
 				" (to encrypt file)")
 		}
 		f.File, err = f.Encrypt(f.File, []byte(key))
 		if err != nil {
-			return fmt.Errorf("Convert (3): %v", err)
+			return fmt.Errorf("Convert (3: encryption): %v", err)
 		}
 	}
 	return nil
@@ -80,18 +80,18 @@ func (f *PF) Deconvert() error {
 	if slices.Contains(f.Flags, "secure") {
 		key, ok := f.Values["key"]
 		if !ok {
-			return errors.New("Deconvert (1): Can't find 'key' key in values" +
+			return errors.New("Deconvert (1: secure): Can't find 'key' key in values" +
 				" (to decrypt file)")
 		}
 		f.File, err = f.Decrypt(f.File, []byte(key))
 		if err != nil {
-			return fmt.Errorf("Deconvert (2): %v", err)
+			return fmt.Errorf("Deconvert (2: encryption): %v", err)
 		}
 	}
 	if slices.Contains(f.Flags, "zip") {
 		err = f.Decompress()
 		if err != nil {
-			return fmt.Errorf("Deconvert (3): %v", err)
+			return fmt.Errorf("Deconvert (3: decompression): %v", err)
 		}
 	}
 	return nil
