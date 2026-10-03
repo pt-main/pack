@@ -6,20 +6,19 @@ import (
 	"slices"
 
 	"github.com/iancoleman/orderedmap"
-	"github.com/pt-main/lc"
-	"github.com/pt-main/lc/engine"
-	"github.com/pt-main/lc/engine/core"
-	"github.com/pt-main/lc/parsing/byteParsing"
-	"github.com/pt-main/lc/public"
-	"github.com/pt-main/lc/tooling/bytecode"
-	"github.com/pt-main/tap/color"
+	"github.com/pt-main/lc/v2"
+	"github.com/pt-main/lc/v2/engine"
+	"github.com/pt-main/lc/v2/engine/core"
+	"github.com/pt-main/lc/v2/parsing/byteParsing"
+	"github.com/pt-main/lc/v2/public"
+	"github.com/pt-main/lc/v2/tooling/bytecode"
 )
 
 var gc = bytecode.GenerationConfig{
 	CommandBytelen:   1,
 	ArgscountBytelen: 2,
 	ArglenBytelen:    32,
-	Endianess:        public.BigEndian,
+	Endianness:       public.BigEndian,
 }
 
 const API_VER = "0"
@@ -107,7 +106,6 @@ func NewParser(c *Core) (*engine.ByteEngine, error) {
 				GConfig: gc, Shifter: *bytecode.NewShift(make([]byte, 0), &idx),
 			},
 		}, public.BigEndian,
-		color.ColorEnabled,
 		context.Background(),
 	)
 	e.NewCommandFull(0, c.setName, "set_name", true)

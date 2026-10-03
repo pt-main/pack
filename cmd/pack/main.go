@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/pt-main/pack"
-	"github.com/pt-main/tap"
+	"github.com/pt-main/tap/go"
 )
 
 func NewParser() *tap.Parser {

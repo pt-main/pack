@@ -11,8 +11,8 @@ import (
 	"github.com/iancoleman/orderedmap"
 	"github.com/pt-main/pack/lib/core"
 	"github.com/pt-main/pack/lib/pff"
-	"github.com/pt-main/tap"
-	"github.com/pt-main/tap/color"
+	"github.com/pt-main/tap/go"
+	"github.com/pt-main/tap/go/color"
 )
 
 func open(file string) ([]byte, error) {
