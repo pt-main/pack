@@ -11,7 +11,7 @@ import (
 	"github.com/iancoleman/orderedmap"
 	"github.com/pt-main/pack/lib/core"
 	"github.com/pt-main/pack/lib/pff"
-	"github.com/pt-main/tap/go"
+	tap "github.com/pt-main/tap/go"
 	"github.com/pt-main/tap/go/color"
 )
 
@@ -70,6 +70,10 @@ func PushHandler(p *tap.Parser, args []string) error {
 		return fmt.Errorf("Push: %v", err)
 	}
 	pff := pff.NewPFfromFile(input, p.Flags)
+	if _, err := pff.SetToCore(); err != nil {
+		return fmt.Errorf("Push: %v", err)
+	}
+
 	for key, val := range p.Flags {
 		if slices.Contains([]string{"secure", "zip", "key"}, key) {
 			continue
@@ -82,7 +86,6 @@ func PushHandler(p *tap.Parser, args []string) error {
 			return fmt.Errorf("Push: %v", err)
 		}
 		pff.Core.Containers.Set(val, what)
-
 	}
 	f, err := pff.GetFromCore()
 	if err != nil {
@@ -101,6 +104,10 @@ func GetHandler(p *tap.Parser, args []string) error {
 		return fmt.Errorf("Get: %v", err)
 	}
 	pff := pff.NewPFfromFile(input, p.Flags)
+	if _, err := pff.SetToCore(); err != nil {
+		return fmt.Errorf("Get: %v", err)
+	}
+
 	file, ok := pff.Core.GetContainer(args[1])
 	if !ok {
 		return fmt.Errorf("Get: Can't get '%s' container", args[1])

@@ -116,7 +116,7 @@ func (f *PF) GetFromCore() ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("GetFromCore (1): %v", err)
 	}
-	err = f.Apply()
+	err = f.Convert()
 	if err != nil {
 		return nil, fmt.Errorf("GetFromCore (2): %v", err)
 	}
@@ -127,7 +127,7 @@ func (f *PF) GetFromCore() ([]byte, error) {
 
 func (f *PF) SetToCore() (*core.Core, error) {
 	var err error
-	err = f.Apply()
+	err = f.Deconvert()
 	if err != nil {
 		return nil, fmt.Errorf("SetToCore (1): %v", err)
 	}
